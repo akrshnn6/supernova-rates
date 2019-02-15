@@ -5,11 +5,6 @@
 
 
 import numpy as np
-from astropy import units as u
-import matplotlib.pyplot as plt 
-import pylab
-import scipy
-import scipy.special as sps
 from scipy import integrate
 
 H0 = 95 #*u.pc #the sacale height of the galaxy
@@ -20,6 +15,7 @@ R_sun = 8700 #*u.pc #we used 8700 bc what was in adams paper not what 8500 what 
 R_super = 3e-2 #/u.yr #galaxy rate of the SN 
 R_sgrb=8e-6 #/u.yr
 R_lgrb=(1/(1100e6)) #/u.yr
+J_kill = 1e5 #(u.J/u.m**2)
 
 class rates:
     
@@ -31,6 +27,8 @@ class rates:
     R_super = 3e-2 #/u.yr #galaxy rate of the SN 
     R_sgrb=8e-6 #/u.yr
     R_lgrb=(1/(1100e6)) #/u.yr
+    J_kill = 1e5 #(u.J/u.m**2)
+
     
     def Adams_rate(r, R_sn): 
         q0 = (R_sn)/(4*np.pi*H0*R0**2) #normalization 
@@ -55,6 +53,12 @@ class rates:
         i = integrate.tplquad(integrand, 0,r, lambda r: 0, lambda r: 2*np.pi,
                                     lambda r, l: -np.pi/2, lambda r, l: np.pi/2)      
         return (i)
+    
+    def E(r_kill, J_kill):
+        return 4*np.pi*r_kill**2*J_kill
+    def fluence(E, r):
+        return E/(4*np.pi*r**2) #units of J/m^2
+
 
 
 
